@@ -63,3 +63,25 @@ This is an Astro-based blog deployed to Cloudflare Workers as a static website. 
 **Modifying blog schema**: Edit `src/content.config.ts` to add/change frontmatter fields. TypeScript will enforce the schema across the codebase.
 
 **Styling**: Global styles in `src/styles/global.css`. Component-specific styles use Astro's scoped `<style>` tags.
+
+## Commit Message Convention
+
+This project follows [Conventional Commits](https://conventionalcommits.org/en/v1.0.0/) specification for commit messages.
+
+**Format**: `<type>(<scope>): <description>`
+
+**Common types**:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, missing semicolons, etc.)
+- `refactor`: Code refactoring without changing functionality
+- `perf`: Performance improvements
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks, dependency updates
+
+**Examples**:
+- `feat(blog): add dark mode toggle`
+- `fix(rss): correct feed generation for updated posts`
+- `docs: update deployment instructions`
+- `chore: migrate from npm to bun`
