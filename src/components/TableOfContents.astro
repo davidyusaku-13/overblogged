@@ -1,0 +1,82 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+
+// Filter to h2 and h3 only, group by depth
+const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{tocItems.length > 0 && (
+  <nav class="table-of-contents">
+    <h2 class="toc-title">On this page</h2>
+    <ul class="toc-list">
+      {tocItems.map((heading) => (
+        <li class={`toc-item depth-${heading.depth}`}>
+          <a href={`#${heading.slug}`} class="toc-link">
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .table-of-contents {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .table-of-contents {
+      display: block;
+      position: sticky;
+      top: 100px;
+      width: 200px;
+      flex-shrink: 0;
+      margin-left: var(--spacing-xl);
+    }
+  }
+
+  .toc-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-item {
+    margin: 0;
+  }
+
+  .toc-item.depth-3 {
+    padding-left: var(--spacing-md);
+  }
+
+  .toc-link {
+    display: block;
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .toc-link:hover {
+    color: var(--accent);
+  }
+
+  :global(.toc-active) {
+    color: var(--accent);
+    font-weight: 500;
+  }
+</style>
