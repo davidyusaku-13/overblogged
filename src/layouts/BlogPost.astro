@@ -120,6 +120,45 @@ const readingTime = Math.ceil(wordCount / 200);
 
     initProgressBar();
     document.addEventListener('astro:page-load', initProgressBar);
+
+    function initCopyButtons() {
+      const preBlocks = document.querySelectorAll('.post-content pre');
+
+      preBlocks.forEach((pre) => {
+        // Check if button already exists
+        if (pre.querySelector('.copy-button')) return;
+
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.type = 'button';
+        button.ariaLabel = 'Copy code';
+        button.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+
+        button.addEventListener('click', async () => {
+          const code = pre.querySelector('code');
+          if (!code) return;
+
+          try {
+            await navigator.clipboard.writeText(code.textContent || '');
+            button.classList.add('copied');
+            button.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+            setTimeout(() => {
+              button.classList.remove('copied');
+              button.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        });
+
+        pre.style.position = 'relative';
+        pre.appendChild(button);
+      });
+    }
+
+    initCopyButtons();
+    document.addEventListener('astro:page-load', initCopyButtons);
     </script>
   </body>
 </html>
@@ -239,5 +278,36 @@ const readingTime = Math.ceil(wordCount / 200);
 
   .back-link {
     font-size: 0.9rem;
+  }
+
+  .post-content :global(.copy-button) {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+    color: var(--text-muted);
+  }
+
+  .post-content :global(.copy-button:hover) {
+    background: var(--code-bg);
+    color: var(--text);
+  }
+
+  .post-content :global(pre:hover .copy-button),
+  .post-content :global(.copy-button:focus),
+  .post-content :global(.copy-button.copied) {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    .post-content :global(.copy-button) {
+      opacity: 1;
+    }
   }
 </style>
