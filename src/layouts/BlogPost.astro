@@ -5,10 +5,13 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import TagPill from '../components/TagPill.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+  headings?: { depth: number; slug: string; text: string }[];
+};
 
-const { title, description, pubDate, updatedDate, heroImage, tags = [] } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [] } = Astro.props;
 
 // Calculate reading time (rough estimate: 200 words per minute)
 const content = await Astro.slots.render('default');
@@ -24,49 +27,65 @@ const readingTime = Math.ceil(wordCount / 200);
   <body>
     <Header />
     <main>
-      <article class="prose">
-        {heroImage && (
-          <div class="hero-image">
-            <img src={heroImage} alt={title} />
-          </div>
-        )}
-        <header class="post-header">
-          <h1>{title}</h1>
-          <div class="post-meta">
-            <FormattedDate date={pubDate} />
-            <span class="separator">&middot;</span>
-            <span>{readingTime} min read</span>
-            {updatedDate && (
-              <>
-                <span class="separator">&middot;</span>
-                <span class="updated">Updated <FormattedDate date={updatedDate} /></span>
-              </>
-            )}
-          </div>
-          {tags.length > 0 && (
-            <div class="post-tags">
-              {tags.map((tag) => (
-                <TagPill tag={tag} />
-              ))}
+      <div class="post-container">
+        <article class="prose">
+          {heroImage && (
+            <div class="hero-image">
+              <img src={heroImage} alt={title} />
             </div>
           )}
-        </header>
-        <div class="post-content">
-          <slot />
-        </div>
-        <footer class="post-footer">
-          <a href="/blog" class="back-link">&larr; Back to blog</a>
-        </footer>
-      </article>
+          <header class="post-header">
+            <h1>{title}</h1>
+            <div class="post-meta">
+              <FormattedDate date={pubDate} />
+              <span class="separator">&middot;</span>
+              <span>{readingTime} min read</span>
+              {updatedDate && (
+                <>
+                  <span class="separator">&middot;</span>
+                  <span class="updated">Updated <FormattedDate date={updatedDate} /></span>
+                </>
+              )}
+            </div>
+            {tags.length > 0 && (
+              <div class="post-tags">
+                {tags.map((tag) => (
+                  <TagPill tag={tag} />
+                ))}
+              </div>
+            )}
+          </header>
+          <div class="post-content">
+            <slot />
+          </div>
+          <footer class="post-footer">
+            <a href="/blog" class="back-link">&larr; Back to blog</a>
+          </footer>
+        </article>
+        <TableOfContents headings={headings} />
+      </div>
     </main>
     <Footer />
   </body>
 </html>
 
 <style>
+  .post-container {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-xl);
+  }
+
   .prose {
+    flex: 1;
     max-width: var(--content-width);
-    margin: 0 auto;
+    min-width: 0;
+  }
+
+  @media (max-width: 1023px) {
+    .post-container {
+      display: block;
+    }
   }
 
   .hero-image {
