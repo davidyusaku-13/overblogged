@@ -1,14 +1,17 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, AUTHOR_NAME } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, AUTHOR_NAME } from "../consts";
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={`About | ${SITE_TITLE}`} description={`About ${AUTHOR_NAME}`} />
+    <BaseHead
+      title={`About | ${SITE_TITLE}`}
+      description={`About ${AUTHOR_NAME}`}
+    />
   </head>
   <body>
     <Header />
@@ -17,26 +20,39 @@ import { SITE_TITLE, AUTHOR_NAME } from '../consts';
 
       <div class="about-content">
         <p>
-          Hi, I'm {AUTHOR_NAME}. I'm a software developer who enjoys building things for the web.
+          Hi, I'm {AUTHOR_NAME}. I'm a software developer who enjoys building
+          things for the web.
         </p>
 
         <p>
-          I write about programming, web development, and the tools I use. This blog is where I share
-          tutorials, project write-ups, and things I've learned along the way.
+          I write about programming, web development, and the tools I use. This
+          blog is where I share tutorials, project write-ups, and things I've
+          learned along the way.
         </p>
 
         <h2>Get in touch</h2>
-        <p>
-          You can find me on:
-        </p>
+        <p>You can find me on:</p>
         <ul class="social-list">
-          <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-          <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter / X</a></li>
-          <li><a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li>
+            <a
+              href="https://github.com/davidyusaku-13"
+              target="_blank"
+              rel="noopener noreferrer">GitHub</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.linkedin.com/in/david-yusaku-setiyono/"
+              target="_blank"
+              rel="noopener noreferrer">LinkedIn</a
+            >
+          </li>
         </ul>
 
         <p>
-          Or reach out via email at <a href="mailto:hello@example.com">hello@example.com</a>.
+          Or reach out via email at <a href="mailto:davidyusaku@proton.me"
+            >davidyusaku@proton.me</a
+          >.
         </p>
       </div>
     </main>
