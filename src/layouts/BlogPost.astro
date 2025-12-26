@@ -5,13 +5,10 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import TagPill from '../components/TagPill.astro';
-import TableOfContents from '../components/TableOfContents.astro';
 
-type Props = CollectionEntry<'blog'>['data'] & {
-  headings?: { depth: number; slug: string; text: string }[];
-};
+type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [] } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [] } = Astro.props;
 
 // Calculate reading time (rough estimate: 200 words per minute)
 const content = await Astro.slots.render('default');
@@ -30,8 +27,7 @@ const readingTime = Math.ceil(wordCount / 200);
       <div class="progress-bar" id="progressBar"></div>
     </div>
     <main>
-      <div class="post-container">
-        <article class="prose">
+      <article class="prose">
         {heroImage && (
           <div class="hero-image">
             <img src={heroImage} alt={title} />
@@ -64,45 +60,10 @@ const readingTime = Math.ceil(wordCount / 200);
         <footer class="post-footer">
           <a href="/blog" class="back-link">&larr; Back to blog</a>
         </footer>
-        </article>
-        <TableOfContents headings={headings} />
-      </div>
+      </article>
     </main>
     <Footer />
     <script>
-      let tocObserver: IntersectionObserver | null = null;
-
-    function initTocObserver() {
-      // Disconnect existing observer to prevent memory leaks
-      if (tocObserver) {
-        tocObserver.disconnect();
-      }
-
-      const tocLinks = document.querySelectorAll('.toc-link');
-      const headings = document.querySelectorAll('.post-content :is(h2, h3)');
-
-      if (tocLinks.length === 0 || headings.length === 0) return;
-
-      tocObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const id = entry.target.getAttribute('id');
-              tocLinks.forEach((link) => {
-                link.classList.toggle('toc-active', link.getAttribute('href') === `#${id}`);
-              });
-            }
-          });
-        },
-        { rootMargin: '-100px 0px -66%' }
-      );
-
-      headings.forEach((h) => tocObserver!.observe(h));
-    }
-
-    initTocObserver();
-    document.addEventListener('astro:page-load', initTocObserver);
-
     function initProgressBar() {
       const progressBar = document.getElementById('progressBar');
       if (!progressBar) return;
@@ -181,22 +142,9 @@ const readingTime = Math.ceil(wordCount / 200);
     transition: width 0.1s ease-out;
   }
 
-  .post-container {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-xl);
-  }
-
   .prose {
-    flex: 1;
     max-width: var(--content-width);
-    min-width: 0;
-  }
-
-  @media (max-width: 1023px) {
-    .post-container {
-      display: block;
-    }
+    margin: 0 auto;
   }
 
   .hero-image {
